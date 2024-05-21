@@ -3,7 +3,7 @@ import 'package:flutter_application_1/OnBoarding/onboardinginfo.dart';
 class OnBoardingItems{
   List<OnBoardingInfo> items = [
     OnBoardingInfo(
-      title: "Welcome to TheBookList", 
+      title: "Welcome to The Book List", 
       descriptions: "Explore a vast collection of books from different genres. Find your next great read with ease.", 
       image: "assets/gifs/Gif1.gif",
       ),

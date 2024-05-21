@@ -6,7 +6,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold (
       body: Center(
         child: TextButton(
           onPressed: ()async{

@@ -1,6 +1,9 @@
+//onb
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/color.dart';
 import 'package:flutter_application_1/OnBoarding/onboardingitems.dart';
+//import 'package:flutter_application_1/home.dart';
+import 'package:flutter_application_1/auth.dart';
 import 'package:flutter_application_1/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -40,7 +43,7 @@ class _OnBoardingState extends State<OnBoarding> {
               effect:const WormEffect(
                 dotHeight: 12,
                 dotWidth: 12,
-                activeDotColor: primaryColor,//.fromARGB(255, 82, 247, 167)
+                activeDotColor: primaryColor,
               ) ,
               ),
         
@@ -67,7 +70,15 @@ class _OnBoardingState extends State<OnBoarding> {
             children: [
               Image.asset(controller.items[index].image),
               SizedBox(height: 5),
-              Text(controller.items[index].title),
+              Text(
+                controller.items[index].title,
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 111, 111, 111), 
+                  fontSize: 15
+                ),
+                textAlign: TextAlign.center,
+                ),
+                
               SizedBox(height: 10),
               Text(
                 controller.items[index].descriptions,
@@ -77,6 +88,7 @@ class _OnBoardingState extends State<OnBoarding> {
                   ),
                 textAlign: TextAlign.center,
               ),
+              
             ],
           );
         },
@@ -97,12 +109,10 @@ class _OnBoardingState extends State<OnBoarding> {
       child: TextButton(
           onPressed: ()async{
             final pres = await SharedPreferences.getInstance();
-            pres.setBool("onboarding", true);
+            await pres.setBool("onboarding", true);
 
-            //After we press get started button this onboarding value become true
-            // same key
             if(!mounted)return;
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Auth()));
           },
           child: const Text("Get started",style: TextStyle(color: Colors.white),)),
     );
