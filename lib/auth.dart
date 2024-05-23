@@ -22,6 +22,18 @@ class _AuthState extends State<Auth> {
   @override
   void initState() {
     super.initState();
+    _checkUserLoggedIn();
+  }
+
+  void _checkUserLoggedIn() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      // User is signed in
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Home()),
+      );
+    }
   }
 
   @override
@@ -35,8 +47,8 @@ class _AuthState extends State<Auth> {
   void _register() async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
       );
       User? user = userCredential.user;
       if (user != null) {
@@ -99,7 +111,7 @@ class _AuthState extends State<Auth> {
             controller: _emailController,
             decoration: InputDecoration(
               filled: true,
-              fillColor:color2,
+              fillColor: color2,
               hintText: 'Email',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -127,7 +139,7 @@ class _AuthState extends State<Auth> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                backgroundColor:primaryColor, 
+                backgroundColor: primaryColor,
               ),
               child: const Text(
                 "Sign in",
@@ -162,7 +174,7 @@ class _AuthState extends State<Auth> {
           MaterialButton(
             child: const Text(
               "Forgot your password?",
-              style: TextStyle(color:primaryColor),
+              style: TextStyle(color: primaryColor),
             ),
             onPressed: () {},
           ),
@@ -227,7 +239,7 @@ class _AuthState extends State<Auth> {
             child: OutlinedButton(
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                backgroundColor:primaryColor,
+                backgroundColor: primaryColor,
               ),
               child: const Text(
                 "Sign up",
@@ -277,8 +289,8 @@ class _AuthState extends State<Auth> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-        _renderSignIn(),
-        _renderSignUp(),
+          _renderSignIn(),
+          _renderSignUp(),
         ],
       ),
     );

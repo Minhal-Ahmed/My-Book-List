@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Components/color.dart';
 import 'package:flutter_application_1/OnBoarding/onboarding.dart';
 import 'package:flutter_application_1/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,11 +33,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.light,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 97, 237, 190),
+          seedColor: primaryColor,
         ),
       ),
-      //darkTheme: ThemeData(brightness: Brightness.dark),
-      //themeMode: ThemeMode.dark,
+      darkTheme: ThemeData(brightness: Brightness.dark),
+      themeMode: ThemeMode.light,
       home: onboarding ? Home() : OnBoarding(),
     );
   }
