@@ -4,6 +4,7 @@ import 'package:flutter_application_1/OnBoarding/onboarding.dart';
 import 'package:flutter_application_1/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import './firebase_options.dart';
 
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: ThemeMode.light,
-      home: onboarding ? Home() : OnBoarding(),
+      home: onboarding ? BookListScreen() : OnBoarding(),
     );
   }
 }
