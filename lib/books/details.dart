@@ -4,6 +4,7 @@ import 'book.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 class BookDetailsScreen extends StatefulWidget {
   final Book book;
 
@@ -68,7 +69,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                               ),
                             ),
                             IconButton(
-                              icon: Icon(Icons.bookmark_add, size: 30, color: primaryColor,),
+                              icon: Icon(Icons.bookmark_add, size: 30, color:primaryColor),
                               onPressed: () => saveBookDetails(volumeInfo),
                             ),
                           ],
@@ -138,7 +139,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
       
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Saved ')),
+      SnackBar(content: Text('Added to List')),
     );
   }
 }

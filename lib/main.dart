@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/color.dart';
 import 'package:flutter_application_1/OnBoarding/onboarding.dart';
-import 'package:flutter_application_1/home.dart';
+import 'package:flutter_application_1/books/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
