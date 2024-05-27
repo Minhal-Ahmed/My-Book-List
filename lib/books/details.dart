@@ -16,11 +16,26 @@ class BookDetailsScreen extends StatefulWidget {
 
 class _BookDetailsScreenState extends State<BookDetailsScreen> {
   late Future<Map<String, dynamic>> _bookDetails;
+  bool isBookSaved = false;
 
   @override
   void initState() {
     super.initState();
     _bookDetails = fetchBookDetails(widget.book.id);
+    checkIfBookIsSaved();
+  }
+
+  Future<void> checkIfBookIsSaved() async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('books')
+        .where('id', isEqualTo: widget.book.id)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      setState(() {
+        isBookSaved = true;
+      });
+    }
   }
 
   @override
@@ -69,8 +84,12 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                               ),
                             ),
                             IconButton(
-                              icon: Icon(Icons.bookmark_add, size: 30, color:primaryColor),
-                              onPressed: () => saveBookDetails(volumeInfo),
+                              icon: Icon(
+                                isBookSaved ? Icons.bookmark_remove : Icons.bookmark_add,
+                                size: 30,
+                                color: primaryColor,
+                              ),
+                              onPressed: () => toggleSaveBook(volumeInfo),
                             ),
                           ],
                         ),
@@ -131,15 +150,32 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     }
   }
 
-  Future<void> saveBookDetails(Map<String, dynamic> volumeInfo) async {
-    CollectionReference books = FirebaseFirestore.instance.collection('books');
-    await books.add({
-      'title': volumeInfo['title'],
-      'authors': volumeInfo['authors']?.join(", "),
-      
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Added to List')),
-    );
+  Future<void> toggleSaveBook(Map<String, dynamic> volumeInfo) async {
+    final bookCollection = FirebaseFirestore.instance.collection('books');
+    final querySnapshot = await bookCollection.where('id', isEqualTo: widget.book.id).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // Book is already saved, remove it
+      await querySnapshot.docs.first.reference.delete();
+      setState(() {
+        isBookSaved = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Removed from List')),
+      );
+    } else {
+      // Book is not saved, add it
+      await bookCollection.add({
+        'id': widget.book.id,
+        'title': volumeInfo['title'],
+        'authors': volumeInfo['authors']?.join(", "),
+      });
+      setState(() {
+        isBookSaved = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Added to List')),
+      );
+    }
   }
 }

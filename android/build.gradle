@@ -17,6 +17,25 @@ tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
 
-dependencies{
-    classpath 'com.google.gms.google-services:4.4.1' 
+//dependencies{
+ //   classpath 'com.google.gms.google-services:4.4.1' 
+//}
+
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.google.gms:google-services:4.4.1'  // Update this to the latest version
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
