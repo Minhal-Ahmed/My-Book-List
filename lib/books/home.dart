@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/color.dart';
+import 'package:flutter_application_1/OnBoarding/onboarding.dart';
 import 'package:flutter_application_1/books/book.dart';
 import 'package:flutter_application_1/books/details.dart';
+import 'package:flutter_application_1/books/profile.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -308,17 +310,45 @@ class _BrowseByGenrePageState extends State<BrowseByGenrePage> {
 }
 
 
+
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Settings Page',
-        style: TextStyle(fontSize: 24.0),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Settings'),
+      ),
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text('Profile'),
+            onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfilePage(
+            ),
+          ),
+        );
+      },
+          ),
+          ListTile(
+            leading: Icon(Icons.exit_to_app),
+            title: Text('Sign Out'),
+            onTap: () {
+              Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => OnBoarding()),
+    );
+            },
+          ),
+        ],
       ),
     );
   }
 }
+
 
 
 

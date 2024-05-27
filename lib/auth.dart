@@ -297,4 +297,16 @@ class _AuthState extends State<Auth> {
       ),
     );
   }
+
+/*void _signOut() async {
+  try {
+    await _auth.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => OnBoarding()),
+    );
+  } catch (e) {
+    _showErrorDialog('Error signing out: $e');
+  }
+}*/
 }
