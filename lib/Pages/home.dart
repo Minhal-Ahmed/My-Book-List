@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/color.dart';
-import 'package:flutter_application_1/OnBoarding/onboarding.dart';
-import 'package:flutter_application_1/books/book.dart';
-import 'package:flutter_application_1/books/details.dart';
-import 'package:flutter_application_1/books/profile.dart';
+import 'package:flutter_application_1/auth.dart';
+import 'package:flutter_application_1/Pages/book.dart';
+import 'package:flutter_application_1/Pages/details.dart';
+import 'package:flutter_application_1/Pages/profile.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_application_1/Pages/firestore_services.dart';
 
 void main() {
   runApp(MyApp());
@@ -74,10 +75,11 @@ class _BookListScreenState extends State<BookListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        title: Text('Discover'),
-        centerTitle: true,
-      ),*/
+      appBar: AppBar(
+        //title: Text('Discover'),
+        //centerTitle: true,
+        backgroundColor: primaryColor,
+      ),
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -87,7 +89,7 @@ class _BookListScreenState extends State<BookListScreen> {
         },
         children: [
           buildBookListPage(),
-          SavedBooksPage(),
+          SavedBooksScreen(),
           BrowseByGenrePage(),
           SettingsPage(),
         ],
@@ -190,17 +192,65 @@ class _BookListScreenState extends State<BookListScreen> {
   }
 }
 
-class SavedBooksPage extends StatelessWidget {
+
+//here
+
+
+class SavedBooksScreen extends StatefulWidget {
+  @override
+  _SavedBooksScreenState createState() => _SavedBooksScreenState();
+}
+
+class _SavedBooksScreenState extends State<SavedBooksScreen> {
+  final FirestoreService _firestoreService = FirestoreService();
+  List<Book> _savedBooks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedBooks();
+  }
+
+  Future<void> _loadSavedBooks() async {
+    final books = await _firestoreService.getSavedBooks();
+    setState(() {
+      _savedBooks = books;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Saved Books Page',
-        style: TextStyle(fontSize: 24.0),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Saved Books'),
       ),
+      body: _savedBooks.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: _savedBooks.length,
+              itemBuilder: (context, index) {
+                final book = _savedBooks[index];
+                return ListTile(
+                  leading: book.imageUrl.isNotEmpty
+                      ? Image.network(book.imageUrl, width: 50, height: 50, fit: BoxFit.cover)
+                      : null,
+                  title: Text(book.title),
+                  subtitle: Text(book.author),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookDetailsScreen(book: book),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }
+
 
 
 class BrowseByGenrePage extends StatefulWidget {
@@ -208,14 +258,15 @@ class BrowseByGenrePage extends StatefulWidget {
   _BrowseByGenrePageState createState() => _BrowseByGenrePageState();
 }
 
+
+
+
 class _BrowseByGenrePageState extends State<BrowseByGenrePage> {
   String _selectedGenre = "Fiction"; // Default genre
   List<String> _genres = [
     "Fiction",
-    "Science",
     "Fantasy",
     "Mystery",
-    "Romance",
     "Classics",
     "Thrillers",
     "Islamic",
@@ -339,7 +390,7 @@ class SettingsPage extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => OnBoarding()),
+              MaterialPageRoute(builder: (context) => Auth()),
     );
             },
           ),

@@ -21,6 +21,7 @@ class _OnBoardingState extends State<OnBoarding> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       bottomSheet: Container(
         color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),

@@ -11,6 +11,16 @@ class Book {
     required this.imageUrl,
   });
 
+//here
+factory Book.fromMap(Map<String, dynamic> map) {
+    return Book(
+      id: map['id'],
+      title: map['title'],
+      author: map['author'],
+      imageUrl: map['imageUrl'] ?? '',
+    );
+  }
+
   factory Book.fromJson(Map<String, dynamic> json) {
     var volumeInfo = json['volumeInfo'];
     return Book(
@@ -20,6 +30,15 @@ class Book {
       imageUrl: volumeInfo['imageLinks'] != null ? volumeInfo['imageLinks']['thumbnail'] : '',
     );
   }
+
+//here
+Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'author': author,
+      'imageUrl': imageUrl,
+    };
 }
 
-
+}

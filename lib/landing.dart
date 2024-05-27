@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/books/book.dart';
-import 'package:flutter_application_1/books/details.dart';
+import 'package:flutter_application_1/Pages/book.dart';
+import 'package:flutter_application_1/Pages/details.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

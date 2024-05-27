@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/color.dart';
 import 'package:flutter_application_1/OnBoarding/onboarding.dart';
-import 'package:flutter_application_1/books/home.dart';
+import 'package:flutter_application_1/Pages/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import './firebase_options.dart';
 
@@ -12,7 +11,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final prefs = await SharedPreferences.getInstance();
-  final onboarding = prefs.getBool("Onoarding") ?? false;
+  final onboarding = prefs.getBool("seenOnboarding") ?? false; // Corrected the key here
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -39,7 +38,7 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: ThemeMode.light,
-      home: onboarding ? BookListScreen() : OnBoarding(),
+      home: onboarding ?  BookListScreen() : const OnBoarding(),
     );
   }
 }
@@ -48,7 +47,7 @@ class AppHome extends StatelessWidget {
   const AppHome({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20.0),
