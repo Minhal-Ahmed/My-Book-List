@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/color.dart';
+import 'package:flutter_application_1/Pages/firestore_services.dart';
 import 'book.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -85,7 +86,9 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                             ),
                             IconButton(
                               icon: Icon(
-                                isBookSaved ? Icons.bookmark_remove : Icons.bookmark_add,
+                                isBookSaved
+                                    ? Icons.bookmark_remove
+                                    : Icons.bookmark_add,
                                 size: 30,
                                 color: primaryColor,
                               ),
@@ -96,30 +99,35 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         SizedBox(height: 10),
                         Text(
                           'Author: ${volumeInfo['authors']?.join(", ") ?? 'N/A'}',
-                          style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                          style:
+                              TextStyle(fontSize: 18, color: Colors.grey[700]),
                         ),
                         SizedBox(height: 20),
                         if (volumeInfo['description'] != null)
                           Text(
                             volumeInfo['description'],
                             textAlign: TextAlign.justify,
-                            style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+                            style: TextStyle(
+                                fontSize: 16, color: Colors.grey[800]),
                           ),
                         SizedBox(height: 20),
                         if (volumeInfo['averageRating'] != null)
                           Text(
                             'Rating: ${volumeInfo['averageRating']} / 5',
-                            style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                            style: TextStyle(
+                                fontSize: 18, color: Colors.grey[700]),
                           ),
                         if (volumeInfo['pageCount'] != null)
                           Text(
                             'Number of Pages: ${volumeInfo['pageCount']}',
-                            style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                            style: TextStyle(
+                                fontSize: 18, color: Colors.grey[700]),
                           ),
                         if (volumeInfo['publishedDate'] != null)
                           Text(
                             'Publication Date: ${volumeInfo['publishedDate']}',
-                            style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                            style: TextStyle(
+                                fontSize: 18, color: Colors.grey[700]),
                           ),
                         SizedBox(height: 20),
                       ],
@@ -151,30 +159,37 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
   }
 
   Future<void> toggleSaveBook(Map<String, dynamic> volumeInfo) async {
-    final bookCollection = FirebaseFirestore.instance.collection('books');
-    final querySnapshot = await bookCollection.where('id', isEqualTo: widget.book.id).get();
+    final firestoreServ = FirestoreService();
+    final books = await firestoreServ.getSavedBooks();
+    bool saved = false;
+    for (var book in books) {
+      if (book.id == widget.book.id) {
+        saved = true;
+        break;
+      }
+    }
 
-    if (querySnapshot.docs.isNotEmpty) {
-      // Book is already saved, remove it
-      await querySnapshot.docs.first.reference.delete();
+    if (saved) {
+      await firestoreServ.deleteBook(widget.book);
       setState(() {
         isBookSaved = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Removed from List')),
+        SnackBar(
+          content: Text('Book removed successfully!'),
+          duration: Duration(seconds: 2),
+        ),
       );
     } else {
-      // Book is not saved, add it
-      await bookCollection.add({
-        'id': widget.book.id,
-        'title': volumeInfo['title'],
-        'authors': volumeInfo['authors']?.join(", "),
-      });
+      await firestoreServ.saveBook(widget.book);
       setState(() {
         isBookSaved = true;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Added to List')),
+        SnackBar(
+          content: Text('Book saved successfully!'),
+          duration: Duration(seconds: 2),
+        ),
       );
     }
   }

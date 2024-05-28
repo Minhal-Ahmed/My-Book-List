@@ -48,6 +48,7 @@ dependencies:
   cloud_firestore: ^4.17.4
   image_picker: ^1.1.1
   firebase_storage: ^11.7.6
+  flutter_rating_bar: ^4.0.1
 
 
 dev_dependencies:

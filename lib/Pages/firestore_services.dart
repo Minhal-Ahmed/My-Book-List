@@ -14,9 +14,22 @@ class FirestoreService {
 
     final userDoc = _firestore.collection('users').doc(user.uid);
     final savedBooksCollection = userDoc.collection('savedBooks');
-    
+
     await savedBooksCollection.doc(book.id.toString()).set(book.toMap());
   }
+
+  Future<void> deleteBook(Book book) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+
+    final userDoc = _firestore.collection('users').doc(user.uid);
+    final savedBooksCollection = userDoc.collection('savedBooks');
+
+    await savedBooksCollection.doc(book.id.toString()).delete();
+  }
+
 
   Future<List<Book>> getSavedBooks() async {
     try {
@@ -25,20 +38,19 @@ class FirestoreService {
         // Handle user not logged in
         return [];
       }
-      
+
       final savedBooksSnapshot = await _firestore
           .collection('users')
           .doc(user.uid)
           .collection('savedBooks')
           .get();
-      
+
       final savedBooks = savedBooksSnapshot.docs
           .map((doc) => Book.fromMap(doc.data()))
           .toList();
-      
+
       print('Retrieved saved books: $savedBooks');
       return savedBooks;
-
     } catch (e) {
       print('Error fetching saved books: $e');
       return [];
