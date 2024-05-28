@@ -101,6 +101,7 @@ class _AuthState extends State<Auth> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 60),
       child: Column(
+        
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -171,14 +172,14 @@ class _AuthState extends State<Auth> {
               });
             },
           ),
-          const SizedBox(height: 10.0),
+          /*const SizedBox(height: 10.0),
           MaterialButton(
             child: const Text(
               "Forgot your password?",
               style: TextStyle(color: primaryColor),
             ),
             onPressed: () {},
-          ),
+          ),*/
         ],
       ),
     );
@@ -297,15 +298,5 @@ class _AuthState extends State<Auth> {
     );
   }
 
-/*void _signOut() async {
-  try {
-    await _auth.signOut();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => OnBoarding()),
-    );
-  } catch (e) {
-    _showErrorDialog('Error signing out: $e');
-  }
-}*/
+
 }

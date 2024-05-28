@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  applovin_max:
+    dependency: "direct main"
+    description:
+      name: applovin_max
+      sha256: "5a808fd56b5e642929efc593430d850d4cd84df3a7ac4f6241217485ed1ba1d4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.10.0"
   archive:
     dependency: transitive
     description:
@@ -278,14 +286,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.19"
-  flutter_rating_bar:
-    dependency: "direct main"
-    description:
-      name: flutter_rating_bar
-      sha256: d2af03469eac832c591a1eba47c91ecc871fe5708e69967073c043b2d775ed93
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter

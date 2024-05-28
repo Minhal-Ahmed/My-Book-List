@@ -7,6 +7,7 @@ import 'package:flutter_application_1/Pages/profile.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/Pages/firestore_services.dart';
+import 'notes.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,6 +21,11 @@ class MyApp extends StatelessWidget {
       //title: 'Discover',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        brightness: Brightness.light,
+        colorScheme: ColorScheme.fromSeed(
+        seedColor: primaryColor,
+        
+      ),
       ),
       home: BookListScreen(),
     );
@@ -34,7 +40,7 @@ class BookListScreen extends StatefulWidget {
 class _BookListScreenState extends State<BookListScreen> {
   late Future<List<Book>> _books;
   final TextEditingController _controller = TextEditingController();
-  String _query = 'Book';
+  String _query = 'world';
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
@@ -91,6 +97,7 @@ class _BookListScreenState extends State<BookListScreen> {
           buildBookListPage(),
           SavedBooksScreen(),
           BrowseByGenrePage(),
+          NotesScreen(),
           SettingsPage(),
         ],
       ),
@@ -105,12 +112,16 @@ class _BookListScreenState extends State<BookListScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
-            label: 'Saved Books',
+            icon: Icon(Icons.menu_book),
+            label: 'Bookshelf',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.category),
-            label: 'Browse',
+            label: 'Browse By Genre',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notes),
+            label: 'Notes',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
@@ -193,7 +204,7 @@ class _BookListScreenState extends State<BookListScreen> {
 }
 
 
-//here
+
 
 
 class SavedBooksScreen extends StatefulWidget {
@@ -222,7 +233,8 @@ class _SavedBooksScreenState extends State<SavedBooksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Saved Books'),
+        title: Text('Bookshelf'),
+        centerTitle: true,
       ),
       body: _savedBooks.isEmpty
           ? Center(child: CircularProgressIndicator())
@@ -230,28 +242,53 @@ class _SavedBooksScreenState extends State<SavedBooksScreen> {
               itemCount: _savedBooks.length,
               itemBuilder: (context, index) {
                 final book = _savedBooks[index];
-                return ListTile(
-                  leading: book.imageUrl.isNotEmpty
-                      ? Image.network(book.imageUrl, width: 50, height: 50, fit: BoxFit.cover)
-                      : null,
-                  title: Text(book.title),
-                  subtitle: Text(book.author),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BookDetailsScreen(book: book),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  child: Card(
+                    elevation: 3,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(8.0),
+                      leading: book.imageUrl.isNotEmpty
+                          ? Image.network(
+                              book.imageUrl,
+                              width: 70,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            )
+                          : Container(
+                              width: 70,
+                              height: 100,
+                              color: Colors.grey[200],
+                              child: Icon(
+                                Icons.book,
+                                size: 40,
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                      title: Text(
+                        book.title,
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    );
-                  },
+                      subtitle: Text(
+                        book.author,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BookDetailsScreen(book: book),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 );
               },
             ),
     );
   }
 }
-
-
 
 class BrowseByGenrePage extends StatefulWidget {
   @override
@@ -303,6 +340,8 @@ class _BrowseByGenrePageState extends State<BrowseByGenrePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Browse by Genre'),
+        centerTitle: true,
+
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -362,12 +401,179 @@ class _BrowseByGenrePageState extends State<BrowseByGenrePage> {
 
 
 
+
+class NotesScreen extends StatefulWidget {
+  @override
+  _NotesScreenState createState() => _NotesScreenState();
+}
+
+class _NotesScreenState extends State<NotesScreen> {
+  final FirestoreService _firestoreService = FirestoreService();
+  List<Note> _notes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotes();
+  }
+
+  Future<void> _loadNotes() async {
+    final notes = await _firestoreService.getSavedNotes();
+    setState(() {
+      _notes = notes;
+    });
+  }
+
+  Future<void> _addNote() async {
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController contentController = TextEditingController();
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add New Note'),
+content: SingleChildScrollView(
+  child: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+          controller: titleController,
+          decoration: InputDecoration(
+            labelText: 'Title',
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+          controller: contentController,
+          decoration: InputDecoration(
+            labelText: 'Content',
+            border: OutlineInputBorder(),
+          ),
+          maxLines: null,
+        ),
+      ),
+    ],
+  ),
+),
+actions: [
+  TextButton(
+    onPressed: () {
+      Navigator.of(context).pop(); // Close dialog
+    },
+    child: Text('Cancel'),
+  ),
+  ElevatedButton(
+    onPressed: () async {
+      final newNote = Note(
+        id: DateTime.now().toIso8601String(), // Unique ID
+        title: titleController.text,
+        content: contentController.text,
+      );
+      await _firestoreService.saveNote(newNote);
+      _loadNotes();
+      Navigator.of(context).pop();
+    },
+    child: Text('Save'),
+  ),
+],
+        /* title: Text('Add New Note'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: titleController,
+                decoration: InputDecoration(hintText: 'Title'),
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller: contentController,
+                decoration: InputDecoration(hintText: 'Content'),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close dialog
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final newNote = Note(
+                  id: DateTime.now().toIso8601String(), // Unique ID
+                  title: titleController.text,
+                  content: contentController.text,
+                );
+                await _firestoreService.saveNote(newNote);
+                _loadNotes();
+                Navigator.of(context).pop();
+              },
+              child: Text('Save'),
+            ),
+          ],*/
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Notes'),
+        centerTitle: true,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addNote,
+        child: Icon(Icons.add),
+      ),
+      body: _notes.isEmpty
+          ? Center()
+          : ListView.builder(
+              itemCount: _notes.length,
+              itemBuilder: (context, index) {
+                final note = _notes[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  child: Card(
+                    elevation: 3,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(8.0),
+                      title: Text(
+                        note.title,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        note.content,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+    );
+  }
+}
+
+
+
+
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
+        centerTitle: true,
+
       ),
       body: ListView(
         children: <Widget>[

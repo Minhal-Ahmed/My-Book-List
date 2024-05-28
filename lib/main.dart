@@ -11,7 +11,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final prefs = await SharedPreferences.getInstance();
-  final onboarding = prefs.getBool("seenOnboarding") ?? false; // Corrected the key here
+  final onboarding = prefs.getBool("seenOnboarding") ?? false; 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
   final bool onboarding;
   const MyApp({super.key, required this.onboarding});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

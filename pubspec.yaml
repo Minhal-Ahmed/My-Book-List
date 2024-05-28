@@ -48,8 +48,8 @@ dependencies:
   cloud_firestore: ^4.17.4
   image_picker: ^1.1.1
   firebase_storage: ^11.7.6
-  flutter_rating_bar: ^4.0.1
-
+  applovin_max: ^3.10.0
+  
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +65,7 @@ flutter_native_splash:
   android_12:
     image: assets/images/logo.png
     icon_background_color: "#F9F9FA"
+
     
 
   # The "flutter_lints" package below contains a set of recommended lints to

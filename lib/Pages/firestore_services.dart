@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_1/Pages/notes.dart';
 import 'book.dart';
 
 class FirestoreService {
@@ -56,4 +57,60 @@ class FirestoreService {
       return [];
     }
   }
+
+
+//here
+  
+
+  Future<void> saveNote(Note note) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+
+    final userDoc = _firestore.collection('users').doc(user.uid);
+    final notesCollection = userDoc.collection('notes');
+
+    await notesCollection.add(note.toMap());
+  }
+
+  Future<void> deleteNote(String noteId) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+
+    final userDoc = _firestore.collection('users').doc(user.uid);
+    final notesCollection = userDoc.collection('notes');
+
+    await notesCollection.doc(noteId).delete();
+  }
+
+  Future<List<Note>> getSavedNotes() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        return [];
+      }
+
+      final notesSnapshot = await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('notes')
+          .get();
+
+      final savedNotes = notesSnapshot.docs
+          .map((doc) => Note.fromMap(doc.data(), doc.id))
+          .toList();
+
+      return savedNotes;
+    } catch (e) {
+      print('Error fetching saved notes: $e');
+      return [];
+    }
+  }
 }
+
+
+    
+
