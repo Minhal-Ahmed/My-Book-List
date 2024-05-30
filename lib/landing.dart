@@ -39,7 +39,6 @@ class _BookListScreenState extends State<BookListScreen> {
   }
 
   Future<List<Book>> fetchBooks(String query) async {
-  //final apiKey = 'AIzaSyBYnIUtjwtuYKeVPpHfbUadotvsiExjs4Q';
   final response = await http.get(
     Uri.parse('https://www.googleapis.com/books/v1/volumes?q=$query'),
   );

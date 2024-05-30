@@ -58,8 +58,6 @@ class FirestoreService {
     }
   }
 
-
-//here
   
 
   Future<void> saveNote(Note note) async {
@@ -74,17 +72,6 @@ class FirestoreService {
     await notesCollection.add(note.toMap());
   }
 
-  Future<void> deleteNote(String noteId) async {
-    final user = _auth.currentUser;
-    if (user == null) {
-      return;
-    }
-
-    final userDoc = _firestore.collection('users').doc(user.uid);
-    final notesCollection = userDoc.collection('notes');
-
-    await notesCollection.doc(noteId).delete();
-  }
 
   Future<List<Note>> getSavedNotes() async {
     try {
@@ -109,8 +96,19 @@ class FirestoreService {
       return [];
     }
   }
+
+
+Future<void> deleteNoteById(String noteId) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+
+    final userDoc = _firestore.collection('users').doc(user.uid);
+    await userDoc.collection('notes').doc(noteId).delete();
+  }
+
 }
 
 
-    
 

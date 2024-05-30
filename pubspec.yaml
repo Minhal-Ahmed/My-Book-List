@@ -48,7 +48,7 @@ dependencies:
   cloud_firestore: ^4.17.4
   image_picker: ^1.1.1
   firebase_storage: ^11.7.6
-  applovin_max: ^3.10.0
+  google_mobile_ads: ^5.1.0
   
 
 dev_dependencies:

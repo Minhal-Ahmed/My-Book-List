@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/Components/color.dart';
 import 'package:flutter_application_1/auth.dart';
 import 'package:flutter_application_1/Pages/book.dart';
@@ -8,7 +9,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/Pages/firestore_services.dart';
 import 'notes.dart';
-
+import 'package:flutter_application_1/banner_ad_widget.dart';
 void main() {
   runApp(MyApp());
 }
@@ -40,7 +41,7 @@ class BookListScreen extends StatefulWidget {
 class _BookListScreenState extends State<BookListScreen> {
   late Future<List<Book>> _books;
   final TextEditingController _controller = TextEditingController();
-  String _query = 'world';
+  String _query = 'Tree';
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
@@ -338,11 +339,11 @@ class _BrowseByGenrePageState extends State<BrowseByGenrePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text('Browse by Genre'),
         centerTitle: true,
 
-      ),
+      ),*/
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -364,6 +365,7 @@ class _BrowseByGenrePageState extends State<BrowseByGenrePage> {
               }).toList(),
             ),
           ),
+          BannerAdWidget(), 
           Expanded(
             child: ListView.builder(
   itemCount: _books.length,
@@ -433,74 +435,40 @@ class _NotesScreenState extends State<NotesScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Add New Note'),
-content: SingleChildScrollView(
-  child: Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextField(
-          controller: titleController,
-          decoration: InputDecoration(
-            labelText: 'Title',
-            border: OutlineInputBorder(),
+          titleTextStyle:TextStyle
+          (color: primaryColor),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: titleController,
+                    decoration: InputDecoration(
+                      labelText: 'Title',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: contentController,
+                    decoration: InputDecoration(
+                      labelText: 'Content',
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: null,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextField(
-          controller: contentController,
-          decoration: InputDecoration(
-            labelText: 'Content',
-            border: OutlineInputBorder(),
-          ),
-          maxLines: null,
-        ),
-      ),
-    ],
-  ),
-),
-actions: [
-  TextButton(
-    onPressed: () {
-      Navigator.of(context).pop(); // Close dialog
-    },
-    child: Text('Cancel'),
-  ),
-  ElevatedButton(
-    onPressed: () async {
-      final newNote = Note(
-        id: DateTime.now().toIso8601String(), // Unique ID
-        title: titleController.text,
-        content: contentController.text,
-      );
-      await _firestoreService.saveNote(newNote);
-      _loadNotes();
-      Navigator.of(context).pop();
-    },
-    child: Text('Save'),
-  ),
-],
-        /* title: Text('Add New Note'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: InputDecoration(hintText: 'Title'),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: contentController,
-                decoration: InputDecoration(hintText: 'Content'),
-              ),
-            ],
-          ),
-          actions: <Widget>[
+          actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop(); 
               },
               child: Text('Cancel'),
             ),
@@ -517,10 +485,15 @@ actions: [
               },
               child: Text('Save'),
             ),
-          ],*/
+          ],
         );
       },
     );
+  }
+
+  Future<void> _deleteNoteById(String noteId) async {
+    await _firestoreService.deleteNoteById(noteId);
+    _loadNotes();
   }
 
   @override
@@ -528,6 +501,7 @@ actions: [
     return Scaffold(
       appBar: AppBar(
         title: Text('Notes'),
+        
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
@@ -535,7 +509,9 @@ actions: [
         child: Icon(Icons.add),
       ),
       body: _notes.isEmpty
-          ? Center()
+          ? Center(
+            //child: Text('No notes available')
+            )
           : ListView.builder(
               itemCount: _notes.length,
               itemBuilder: (context, index) {
@@ -554,6 +530,11 @@ actions: [
                         note.content,
                         style: TextStyle(color: Colors.grey),
                       ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        color: Colors.red,
+                        onPressed: () => _deleteNoteById(note.id),
+                      ),
                     ),
                   ),
                 );
@@ -562,8 +543,6 @@ actions: [
     );
   }
 }
-
-
 
 
 class SettingsPage extends StatelessWidget {

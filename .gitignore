@@ -31,6 +31,7 @@ migrate_working_dir/
 .pub/
 /build/
 firebase_options.dart
+banner_ad_widget.dart
 
 # Symbolication related
 app.*.symbols
