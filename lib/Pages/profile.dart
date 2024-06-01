@@ -83,13 +83,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   : NetworkImage(user?.photoURL ?? 'https://via.placeholder.com/150') as ImageProvider<Object>?,
             ),
             const SizedBox(height: 20),
-            Text(
+            /*Text(
               user?.displayName ?? 'Anonymous',
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
-            ),
+            ),*/
             const SizedBox(height: 10),
             Text(
               user?.email ?? 'No email',

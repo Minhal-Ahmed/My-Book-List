@@ -1,19 +1,18 @@
 # My Book List
 
-BookInfoApp is a Flutter mobile app that allows users to browse, search, and review books. The app integrates with the Google Books API for fetching book details and uses Firebase Firestore for storing user-submitted reviews.
+My Book List is a Flutter mobile app that allows users to browse, search, and review books. The app integrates with the Google Books API for fetching book details and uses Firebase Firestore for storing notes added by user.
 
 ## Features
 
 - **User Authentication**: Implement user sign-up and login functionality using Firebase Authentication.
 - **Book Browsing**: Browse books by genre and search for specific titles using the Google Books API.
-- **Review Submission**: Allow users to submit reviews and ratings for books they've read.
+- **Adding Notes**: Allow users to add notes from the books they read.
 - **Profile Management**: Enable users to manage their profile information and view their submitted reviews.
 
 ## Technologies Used
 
 - **Flutter**: Front-end framework for building cross-platform mobile apps.
 - **Firebase**: Backend services including Firestore for data storage and Authentication for user management.
-- **HTTP package**: Used to make API requests to the Google Books API.
 
 ## Getting Started
 

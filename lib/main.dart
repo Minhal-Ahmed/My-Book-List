@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/color.dart';
 import 'package:flutter_application_1/OnBoarding/onboarding.dart';
 import 'package:flutter_application_1/Pages/home.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,7 +17,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-    MobileAds.instance.initialize();
+    //MobileAds.instance.initialize();
 
   runApp(MyApp(onboarding: onboarding));
 }

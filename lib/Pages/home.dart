@@ -9,7 +9,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/Pages/firestore_services.dart';
 import 'notes.dart';
-import 'package:flutter_application_1/banner_ad_widget.dart';
+//import 'package:flutter_application_1/banner_ad_widget.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -118,7 +119,7 @@ class _BookListScreenState extends State<BookListScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.category),
-            label: 'Browse By Genre',
+            label: 'Browse',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notes),
@@ -207,7 +208,6 @@ class _BookListScreenState extends State<BookListScreen> {
 
 
 
-
 class SavedBooksScreen extends StatefulWidget {
   @override
   _SavedBooksScreenState createState() => _SavedBooksScreenState();
@@ -233,10 +233,10 @@ class _SavedBooksScreenState extends State<SavedBooksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text('Bookshelf'),
         centerTitle: true,
-      ),
+      ),*/
       body: _savedBooks.isEmpty
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
@@ -365,7 +365,7 @@ class _BrowseByGenrePageState extends State<BrowseByGenrePage> {
               }).toList(),
             ),
           ),
-          BannerAdWidget(), 
+          //BannerAdWidget(), 
           Expanded(
             child: ListView.builder(
   itemCount: _books.length,
@@ -532,7 +532,7 @@ class _NotesScreenState extends State<NotesScreen> {
                       ),
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
-                        color: Colors.red,
+                        color: primaryColor,
                         onPressed: () => _deleteNoteById(note.id),
                       ),
                     ),
@@ -576,6 +576,7 @@ class SettingsPage extends StatelessWidget {
               Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => Auth()),
+
     );
             },
           ),
